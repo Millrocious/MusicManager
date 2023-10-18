@@ -42,12 +42,12 @@ public class SongController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<SongResponseDto> updateTask(@PathVariable Long id, @RequestBody SongRequestDto requestDto) {
+    public ResponseEntity<SongResponseDto> updateSong(@PathVariable Long id, @RequestBody SongRequestDto requestDto) {
         return ResponseEntity.accepted().body(songService.update(id, requestDto));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> removeTask(@PathVariable Long id) {
+    public ResponseEntity<?> removeSong(@PathVariable Long id) {
         songService.remove(id);
         return ResponseEntity.noContent().build();
     }

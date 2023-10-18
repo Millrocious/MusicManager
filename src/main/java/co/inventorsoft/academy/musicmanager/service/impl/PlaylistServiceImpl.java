@@ -70,10 +70,7 @@ public class PlaylistServiceImpl implements PlaylistService {
     @Override
     public List<PlaylistResponseDto> searchPlaylists(String keyword) {
         if (keyword == null || keyword.isEmpty()) {
-            return playlistRepository.findAll()
-                    .stream()
-                    .map(playlistMapper::toResponseDto)
-                    .toList();
+            return findAll();
         } else {
             return playlistRepository.findPlaylistsByTitleContaining(keyword)
                     .stream()

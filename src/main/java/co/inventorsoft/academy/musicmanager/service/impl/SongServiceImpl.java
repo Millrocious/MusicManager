@@ -56,10 +56,7 @@ public class SongServiceImpl implements SongService {
     @Override
     public List<SongResponseDto> searchSongs(String keyword) {
         if (keyword == null || keyword.isEmpty()) {
-            return songRepository.findAll()
-                    .stream()
-                    .map(songMapper::toResponseDto)
-                    .toList();
+            return findAll();
         } else {
             return songRepository.findSongsByTitleContaining(keyword)
                     .stream()

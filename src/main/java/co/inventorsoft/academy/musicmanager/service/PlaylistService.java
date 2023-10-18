@@ -12,4 +12,6 @@ public interface PlaylistService {
     PlaylistResponseDto update(Long id, PlaylistRequestDto requestDto);
     void remove(Long id);
     void addSongToPlaylist(Long playlistId, Long songId);
+
+    List<PlaylistResponseDto> searchPlaylists(String keyword);
 }

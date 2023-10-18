@@ -11,4 +11,5 @@ public interface SongService {
     SongResponseDto findById(Long id);
     SongResponseDto update(Long id, SongRequestDto requestDto);
     void remove(Long id);
+    List<SongResponseDto> searchSongs(String keyword);
 }

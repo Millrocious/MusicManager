@@ -67,6 +67,21 @@ public class PlaylistServiceImpl implements PlaylistService {
         playlistRepository.save(playlist);
     }
 
+    @Override
+    public List<PlaylistResponseDto> searchPlaylists(String keyword) {
+        if (keyword == null || keyword.isEmpty()) {
+            return playlistRepository.findAll()
+                    .stream()
+                    .map(playlistMapper::toResponseDto)
+                    .toList();
+        } else {
+            return playlistRepository.findPlaylistsByTitleContaining(keyword)
+                    .stream()
+                    .map(playlistMapper::toResponseDto)
+                    .toList();
+        }
+    }
+
     private Playlist getExistingPlaylistById(long id) {
         return playlistRepository.findById(id)
                 .orElseThrow(() -> new WebException(HttpStatus.NOT_FOUND, "Playlist not found"));

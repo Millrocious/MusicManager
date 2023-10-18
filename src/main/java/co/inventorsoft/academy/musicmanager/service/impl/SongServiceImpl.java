@@ -53,6 +53,21 @@ public class SongServiceImpl implements SongService {
         songRepository.deleteById(id);
     }
 
+    @Override
+    public List<SongResponseDto> searchSongs(String keyword) {
+        if (keyword == null || keyword.isEmpty()) {
+            return songRepository.findAll()
+                    .stream()
+                    .map(songMapper::toResponseDto)
+                    .toList();
+        } else {
+            return songRepository.findSongsByTitleContaining(keyword)
+                    .stream()
+                    .map(songMapper::toResponseDto)
+                    .toList();
+        }
+    }
+
     private Song getExistingSongById(long id) {
         return songRepository.findById(id)
                 .orElseThrow(() -> new WebException(HttpStatus.NOT_FOUND, "Song not found"));

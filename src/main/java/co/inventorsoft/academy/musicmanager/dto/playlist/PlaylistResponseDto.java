@@ -1,13 +1,8 @@
-package co.inventorsoft.academy.musicmanager.dto.song;
+package co.inventorsoft.academy.musicmanager.dto.playlist;
 
-import co.inventorsoft.academy.musicmanager.entity.Genre;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-
-public record SongResponseDto(
+public record PlaylistResponseDto(
         Long id,
         String title,
-        String artist,
-        Genre genre
+        String description
 ) {
 }

@@ -1,8 +1,8 @@
 package co.inventorsoft.academy.musicmanager.controller;
 
-import co.inventorsoft.academy.musicmanager.dto.song.SongRequestDto;
-import co.inventorsoft.academy.musicmanager.dto.song.SongResponseDto;
-import co.inventorsoft.academy.musicmanager.service.SongService;
+import co.inventorsoft.academy.musicmanager.dto.playlist.PlaylistRequestDto;
+import co.inventorsoft.academy.musicmanager.dto.playlist.PlaylistResponseDto;
+import co.inventorsoft.academy.musicmanager.service.PlaylistService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,36 +19,44 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/songs")
-public class SongController {
-    private final SongService songService;
+@RequestMapping("/api/playlists")
+public class PlaylistController {
+    private final PlaylistService playlistService;
 
     @PostMapping
-    public ResponseEntity<SongResponseDto> addSong(
-            @RequestBody SongRequestDto requestDto
+    public ResponseEntity<PlaylistResponseDto> addSong(
+            @RequestBody PlaylistRequestDto requestDto
     ) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(songService.save(requestDto));
+                .body(playlistService.save(requestDto));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<SongResponseDto> getSong(@PathVariable Long id) {
-        return ResponseEntity.ok(songService.findById(id));
+    public ResponseEntity<PlaylistResponseDto> getPlaylist(@PathVariable Long id) {
+        return ResponseEntity.ok(playlistService.findById(id));
     }
 
     @GetMapping
-    public ResponseEntity<List<SongResponseDto>> getAllTasks() {
-        return ResponseEntity.ok(songService.findAll());
+    public ResponseEntity<List<PlaylistResponseDto>> getAllPlaylists() {
+        return ResponseEntity.ok(playlistService.findAll());
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<SongResponseDto> updateTask(@PathVariable Long id, @RequestBody SongRequestDto requestDto) {
-        return ResponseEntity.accepted().body(songService.update(id, requestDto));
+    public ResponseEntity<PlaylistResponseDto> updatePlaylist(@PathVariable Long id, @RequestBody PlaylistRequestDto requestDto) {
+        return ResponseEntity.accepted().body(playlistService.update(id, requestDto));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> removeTask(@PathVariable Long id) {
-        songService.remove(id);
+    public ResponseEntity<?> removePlaylist(@PathVariable Long id) {
+        playlistService.remove(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/{playlistId}/{songId}")
+    public ResponseEntity<String> addSongToPlaylist(
+            @PathVariable Long playlistId,
+            @PathVariable Long songId) {
+        playlistService.addSongToPlaylist(playlistId, songId);
+        return ResponseEntity.ok("Song added to the playlist successfully");
     }
 }

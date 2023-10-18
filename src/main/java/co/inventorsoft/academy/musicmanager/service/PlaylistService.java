@@ -1,14 +1,15 @@
 package co.inventorsoft.academy.musicmanager.service;
 
-import co.inventorsoft.academy.musicmanager.dto.SongRequestDto;
-import co.inventorsoft.academy.musicmanager.dto.SongResponseDto;
+import co.inventorsoft.academy.musicmanager.dto.playlist.PlaylistRequestDto;
+import co.inventorsoft.academy.musicmanager.dto.playlist.PlaylistResponseDto;
 
 import java.util.List;
 
-public interface SongService {
-    SongResponseDto save(SongRequestDto task);
-    List<SongResponseDto> findAll();
-    SongResponseDto findById(Long id);
-    SongResponseDto update(Long id, SongRequestDto task);
+public interface PlaylistService {
+    PlaylistResponseDto save(PlaylistRequestDto requestDto);
+    List<PlaylistResponseDto> findAll();
+    PlaylistResponseDto findById(Long id);
+    PlaylistResponseDto update(Long id, PlaylistRequestDto requestDto);
     void remove(Long id);
+    void addSongToPlaylist(Long playlistId, Long songId);
 }

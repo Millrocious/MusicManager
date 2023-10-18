@@ -1,12 +1,14 @@
 package co.inventorsoft.academy.musicmanager.service.impl;
 
-import co.inventorsoft.academy.musicmanager.dto.song.SongRequestDto;
-import co.inventorsoft.academy.musicmanager.dto.song.SongResponseDto;
+import co.inventorsoft.academy.musicmanager.dto.playlist.PlaylistRequestDto;
+import co.inventorsoft.academy.musicmanager.dto.playlist.PlaylistResponseDto;
+import co.inventorsoft.academy.musicmanager.entity.Playlist;
 import co.inventorsoft.academy.musicmanager.entity.Song;
 import co.inventorsoft.academy.musicmanager.exception.WebException;
-import co.inventorsoft.academy.musicmanager.mapper.SongMapper;
+import co.inventorsoft.academy.musicmanager.mapper.PlaylistMapper;
+import co.inventorsoft.academy.musicmanager.repository.PlaylistRepository;
 import co.inventorsoft.academy.musicmanager.repository.SongRepository;
-import co.inventorsoft.academy.musicmanager.service.SongService;
+import co.inventorsoft.academy.musicmanager.service.PlaylistService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -15,46 +17,58 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class SongServiceImpl implements SongService {
+public class PlaylistServiceImpl implements PlaylistService {
+    private final PlaylistRepository playlistRepository;
     private final SongRepository songRepository;
-    private final SongMapper songMapper;
+    private final PlaylistMapper playlistMapper;
 
     @Override
-    public SongResponseDto save(SongRequestDto song) {
-        Song newSong = songMapper.toEntity(song);
-        return songMapper.toResponseDto(songRepository.save(newSong));
+    public PlaylistResponseDto save(PlaylistRequestDto playlistRequestDto) {
+        Playlist newPlaylist = playlistMapper.toEntity(playlistRequestDto);
+        return playlistMapper.toResponseDto(playlistRepository.save(newPlaylist));
     }
 
     @Override
-    public List<SongResponseDto> findAll() {
-        return songRepository.findAll()
+    public List<PlaylistResponseDto> findAll() {
+        return playlistRepository.findAll()
                 .stream()
-                .map(songMapper::toResponseDto)
+                .map(playlistMapper::toResponseDto)
                 .toList();
     }
 
     @Override
-    public SongResponseDto findById(Long id) {
-        Song existingSong = getExistingSongById(id);
-        return songMapper.toResponseDto(existingSong);
+    public PlaylistResponseDto findById(Long id) {
+        Playlist playlist = getExistingPlaylistById(id);
+        return playlistMapper.toResponseDto(playlist);
     }
 
     @Override
-    public SongResponseDto update(Long id, SongRequestDto songDto) {
-        Song song = getExistingSongById(id);
-        songMapper.updateEntity(songDto, song);
-        songRepository.save(song);
-        return songMapper.toResponseDto(song);
+    public PlaylistResponseDto update(Long id, PlaylistRequestDto playlistRequestDto) {
+        Playlist playlist = getExistingPlaylistById(id);
+        playlistMapper.updateEntity(playlistRequestDto, playlist);
+        playlistRepository.save(playlist);
+        return playlistMapper.toResponseDto(playlist);
     }
 
     @Override
     public void remove(Long id) {
-        Song existingSong = getExistingSongById(id);
-        songRepository.deleteById(id);
+        Playlist existingSong = getExistingPlaylistById(id);
+        playlistRepository.deleteById(id);
     }
 
-    private Song getExistingSongById(long id) {
-        return songRepository.findById(id)
+    @Override
+    public void addSongToPlaylist(Long playlistId, Long songId) {
+        Playlist playlist = getExistingPlaylistById(playlistId);
+
+        Song song = songRepository.findById(songId)
                 .orElseThrow(() -> new WebException(HttpStatus.NOT_FOUND, "Song not found"));
+
+        playlist.getSongs().add(song);
+        playlistRepository.save(playlist);
+    }
+
+    private Playlist getExistingPlaylistById(long id) {
+        return playlistRepository.findById(id)
+                .orElseThrow(() -> new WebException(HttpStatus.NOT_FOUND, "Playlist not found"));
     }
 }

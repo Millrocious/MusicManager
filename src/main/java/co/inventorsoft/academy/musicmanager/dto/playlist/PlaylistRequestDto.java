@@ -1,17 +1,12 @@
-package co.inventorsoft.academy.musicmanager.dto.song;
+package co.inventorsoft.academy.musicmanager.dto.playlist;
 
-import co.inventorsoft.academy.musicmanager.entity.Genre;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public record SongRequestDto(
+public record PlaylistRequestDto(
         @NotBlank(message = "Title cannot be empty")
         String title,
-        @NotBlank(message = "Artist cannot be empty")
-        String artist,
-        @NotNull(message = "Duration cannot be empty")
-        Integer duration,
-        @NotNull(message = "Genre cannot be empty")
-        Genre genre
+        @NotNull(message = "Description cannot be null")
+        String description
 ) {
 }

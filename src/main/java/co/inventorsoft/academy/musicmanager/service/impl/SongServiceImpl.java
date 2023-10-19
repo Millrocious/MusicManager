@@ -3,13 +3,13 @@ package co.inventorsoft.academy.musicmanager.service.impl;
 import co.inventorsoft.academy.musicmanager.dto.song.SongRequestDto;
 import co.inventorsoft.academy.musicmanager.dto.song.SongResponseDto;
 import co.inventorsoft.academy.musicmanager.entity.Song;
-import co.inventorsoft.academy.musicmanager.exception.WebException;
 import co.inventorsoft.academy.musicmanager.mapper.SongMapper;
 import co.inventorsoft.academy.musicmanager.repository.SongRepository;
 import co.inventorsoft.academy.musicmanager.service.SongService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -67,6 +67,6 @@ public class SongServiceImpl implements SongService {
 
     private Song getExistingSongById(long id) {
         return songRepository.findById(id)
-                .orElseThrow(() -> new WebException(HttpStatus.NOT_FOUND, "Song not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Song not found"));
     }
 }

@@ -4,7 +4,6 @@ import co.inventorsoft.academy.musicmanager.dto.playlist.PlaylistRequestDto;
 import co.inventorsoft.academy.musicmanager.dto.playlist.PlaylistResponseDto;
 import co.inventorsoft.academy.musicmanager.entity.Playlist;
 import co.inventorsoft.academy.musicmanager.entity.Song;
-import co.inventorsoft.academy.musicmanager.exception.WebException;
 import co.inventorsoft.academy.musicmanager.mapper.PlaylistMapper;
 import co.inventorsoft.academy.musicmanager.repository.PlaylistRepository;
 import co.inventorsoft.academy.musicmanager.repository.SongRepository;
@@ -12,6 +11,7 @@ import co.inventorsoft.academy.musicmanager.service.PlaylistService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -61,7 +61,7 @@ public class PlaylistServiceImpl implements PlaylistService {
         Playlist playlist = getExistingPlaylistById(playlistId);
 
         Song song = songRepository.findById(songId)
-                .orElseThrow(() -> new WebException(HttpStatus.NOT_FOUND, "Song not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Song not found"));
 
         playlist.getSongs().add(song);
         playlistRepository.save(playlist);
@@ -81,6 +81,6 @@ public class PlaylistServiceImpl implements PlaylistService {
 
     private Playlist getExistingPlaylistById(long id) {
         return playlistRepository.findById(id)
-                .orElseThrow(() -> new WebException(HttpStatus.NOT_FOUND, "Playlist not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Playlist not found"));
     }
 }

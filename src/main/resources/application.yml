@@ -1,0 +1,16 @@
+# Database configuration
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: postgres
+
+  # Hibernate properties
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+# JWT Secret Key
+jwt:
+  secret-key: "78214125442A472D4B6150645367566B59703373367638792F423F4528482B4D"

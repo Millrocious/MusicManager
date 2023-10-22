@@ -1,24 +1,28 @@
 package co.inventorsoft.academy.musicmanager.entity;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter
 @Setter
+@ToString
+@NoArgsConstructor
 @Table(name = "playlist")
 public class Playlist {
     @Id
@@ -28,12 +32,15 @@ public class Playlist {
     private String title;
     private String description;
 
-    @JoinColumn
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Song> songs;
-
     private LocalDateTime updateDate;
     private LocalDateTime createDate;
+
+    @ManyToMany(mappedBy = "songPlaylists")
+    Set<Song> songs;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User owner;
 
     @PrePersist
     public void createEntity() {

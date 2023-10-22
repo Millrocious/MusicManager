@@ -4,9 +4,11 @@ import co.inventorsoft.academy.musicmanager.dto.playlist.PlaylistRequestDto;
 import co.inventorsoft.academy.musicmanager.dto.playlist.PlaylistResponseDto;
 import co.inventorsoft.academy.musicmanager.entity.Playlist;
 import co.inventorsoft.academy.musicmanager.entity.Song;
+import co.inventorsoft.academy.musicmanager.entity.User;
 import co.inventorsoft.academy.musicmanager.mapper.PlaylistMapper;
 import co.inventorsoft.academy.musicmanager.repository.PlaylistRepository;
 import co.inventorsoft.academy.musicmanager.repository.SongRepository;
+import co.inventorsoft.academy.musicmanager.repository.UserRepository;
 import co.inventorsoft.academy.musicmanager.service.PlaylistService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,11 +22,17 @@ import java.util.List;
 public class PlaylistServiceImpl implements PlaylistService {
     private final PlaylistRepository playlistRepository;
     private final SongRepository songRepository;
+    private final UserRepository userRepository;
     private final PlaylistMapper playlistMapper;
 
+
     @Override
-    public PlaylistResponseDto save(PlaylistRequestDto playlistRequestDto) {
+    public PlaylistResponseDto save(Long userId, PlaylistRequestDto playlistRequestDto) {
         Playlist newPlaylist = playlistMapper.toEntity(playlistRequestDto);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+
+        newPlaylist.setOwner(user);
         return playlistMapper.toResponseDto(playlistRepository.save(newPlaylist));
     }
 
@@ -52,7 +60,6 @@ public class PlaylistServiceImpl implements PlaylistService {
 
     @Override
     public void remove(Long id) {
-        Playlist existingSong = getExistingPlaylistById(id);
         playlistRepository.deleteById(id);
     }
 

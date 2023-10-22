@@ -25,12 +25,6 @@ import java.util.List;
 public class PlaylistController {
     private final PlaylistService playlistService;
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public PlaylistResponseDto addPlaylist(@RequestBody @Valid PlaylistRequestDto requestDto) {
-        return playlistService.save(requestDto);
-    }
-
     @GetMapping("/{id}")
     public PlaylistResponseDto getPlaylist(@PathVariable Long id) {
         return playlistService.findById(id);

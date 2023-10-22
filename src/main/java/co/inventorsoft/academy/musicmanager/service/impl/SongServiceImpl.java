@@ -49,7 +49,6 @@ public class SongServiceImpl implements SongService {
 
     @Override
     public void remove(Long id) {
-        Song existingSong = getExistingSongById(id);
         songRepository.deleteById(id);
     }
 

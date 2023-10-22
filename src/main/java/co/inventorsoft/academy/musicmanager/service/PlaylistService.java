@@ -6,7 +6,7 @@ import co.inventorsoft.academy.musicmanager.dto.playlist.PlaylistResponseDto;
 import java.util.List;
 
 public interface PlaylistService {
-    PlaylistResponseDto save(PlaylistRequestDto requestDto);
+    PlaylistResponseDto save(Long userId, PlaylistRequestDto playlistRequestDto);
     List<PlaylistResponseDto> findAll();
     PlaylistResponseDto findById(Long id);
     PlaylistResponseDto update(Long id, PlaylistRequestDto requestDto);

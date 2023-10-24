@@ -7,13 +7,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -34,7 +34,9 @@ public class Song {
     private String artist;
     private Integer duration;
 
+    @CreationTimestamp
     private LocalDateTime updateDate;
+    @UpdateTimestamp
     private LocalDateTime createDate;
 
     @ManyToMany
@@ -44,15 +46,4 @@ public class Song {
             inverseJoinColumns = @JoinColumn(name = "playlist_id")
     )
     Set<Playlist> songPlaylists = new HashSet<>();
-
-    @PrePersist
-    public void createEntity() {
-        createDate = LocalDateTime.now();
-        updateDate = LocalDateTime.now();
-    }
-
-    @PreUpdate
-    public void updateEntity() {
-        updateDate = LocalDateTime.now();
-    }
 }

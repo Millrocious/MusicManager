@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class TaskController {
 
     @GetMapping("/user")
-    @PreAuthorize("isAuthenticated()")
     public String getSomeText() {
         return "User is authenticated!";
     }

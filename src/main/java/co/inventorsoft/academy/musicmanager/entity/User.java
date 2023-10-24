@@ -8,13 +8,13 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -50,20 +50,10 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
     private transient Set<Playlist> userPlaylists = new HashSet<>();
 
+    @CreationTimestamp
     private LocalDateTime updateDate;
-
+    @UpdateTimestamp
     private LocalDateTime createDate;
-
-    @PrePersist
-    public void createEntity() {
-        createDate = LocalDateTime.now();
-        updateDate = LocalDateTime.now();
-    }
-
-    @PreUpdate
-    public void updateEntity() {
-        updateDate = LocalDateTime.now();
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

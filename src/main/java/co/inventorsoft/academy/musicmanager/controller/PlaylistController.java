@@ -2,7 +2,7 @@ package co.inventorsoft.academy.musicmanager.controller;
 
 import co.inventorsoft.academy.musicmanager.dto.playlist.PlaylistRequestDto;
 import co.inventorsoft.academy.musicmanager.dto.playlist.PlaylistResponseDto;
-import co.inventorsoft.academy.musicmanager.service.PlaylistService;
+import co.inventorsoft.academy.musicmanager.service.PlaylistServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,7 +23,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/playlists")
 public class PlaylistController {
-    private final PlaylistService playlistService;
+    private final PlaylistServiceImpl playlistService;
 
     @GetMapping("/{id}")
     public PlaylistResponseDto getPlaylist(@PathVariable Long id) {

@@ -1,4 +1,4 @@
-package co.inventorsoft.academy.musicmanager.service.impl;
+package co.inventorsoft.academy.musicmanager.service;
 
 import co.inventorsoft.academy.musicmanager.dto.auth.AuthRequest;
 import co.inventorsoft.academy.musicmanager.dto.auth.AuthResponse;
@@ -8,8 +8,6 @@ import co.inventorsoft.academy.musicmanager.entity.User;
 import co.inventorsoft.academy.musicmanager.mapper.UserMapper;
 import co.inventorsoft.academy.musicmanager.repository.UserRepository;
 import co.inventorsoft.academy.musicmanager.security.JwtService;
-import co.inventorsoft.academy.musicmanager.service.AuthService;
-import co.inventorsoft.academy.musicmanager.util.UserUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,23 +19,22 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
-public class AuthServiceImpl implements AuthService {
+public class AuthServiceImpl {
     private final UserMapper userMapper;
     private final UserRepository userRepository;
-    private final UserUtil userUtil;
+    private final UserServiceImpl userService;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    @Override
     public AuthResponse register(UserRequestDto userDto) {
-        if(userUtil.checkIfUserExist(userDto.email())) {
+        if(userService.checkIfUserExist(userDto.email())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "User already exists");
         }
 
         User user = userMapper.toEntity(userDto);
 
         user.setRole(Role.USER);
-        userUtil.encodePassword(user, userDto);
+        userService.encodePassword(user, userDto);
         userRepository.save(user);
 
         String jwtToken = jwtService.generateToken(
@@ -46,20 +43,16 @@ public class AuthServiceImpl implements AuthService {
                         "role", user.getRole()
                 ), user);
 
-        return AuthResponse.builder()
-                .token(jwtToken)
-                .build();
+        return new AuthResponse(jwtToken);
     }
 
-    @Override
     public AuthResponse authenticate(AuthRequest request) {
-        authenticationManager.authenticate(
+        User user = (User) authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.email(),
                         request.password()
                 )
-        );
-        User user = userUtil.getExistingUser(request.email());
+        ).getPrincipal();
 
         String jwtToken = jwtService.generateToken(
                 Map.of(
@@ -67,9 +60,7 @@ public class AuthServiceImpl implements AuthService {
                         "role", user.getRole()
                 ), user);
 
-        return AuthResponse.builder()
-                .token(jwtToken)
-                .build();
+        return new AuthResponse(jwtToken);
     }
 
 }

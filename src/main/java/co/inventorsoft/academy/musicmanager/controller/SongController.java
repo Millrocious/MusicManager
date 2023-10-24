@@ -2,7 +2,7 @@ package co.inventorsoft.academy.musicmanager.controller;
 
 import co.inventorsoft.academy.musicmanager.dto.song.SongRequestDto;
 import co.inventorsoft.academy.musicmanager.dto.song.SongResponseDto;
-import co.inventorsoft.academy.musicmanager.service.SongService;
+import co.inventorsoft.academy.musicmanager.service.SongServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,7 +23,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/songs")
 public class SongController {
-    private final SongService songService;
+    private final SongServiceImpl songService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)

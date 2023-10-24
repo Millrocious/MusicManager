@@ -4,8 +4,8 @@ import co.inventorsoft.academy.musicmanager.dto.playlist.PlaylistRequestDto;
 import co.inventorsoft.academy.musicmanager.dto.playlist.PlaylistResponseDto;
 import co.inventorsoft.academy.musicmanager.dto.user.UserRequestDto;
 import co.inventorsoft.academy.musicmanager.dto.user.UserResponseDto;
-import co.inventorsoft.academy.musicmanager.service.PlaylistService;
-import co.inventorsoft.academy.musicmanager.service.UserService;
+import co.inventorsoft.academy.musicmanager.service.PlaylistServiceImpl;
+import co.inventorsoft.academy.musicmanager.service.UserServiceImpl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,8 +26,8 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/users")
 public class UserController {
-    private final UserService userService;
-    private final PlaylistService playlistService;
+    private final UserServiceImpl userService;
+    private final PlaylistServiceImpl playlistService;
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN')")

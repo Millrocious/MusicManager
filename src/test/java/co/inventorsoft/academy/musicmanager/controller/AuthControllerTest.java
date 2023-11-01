@@ -39,6 +39,9 @@ class AuthControllerTest {
     @Autowired
     private UserServiceImpl userService;
 
+    private static final String AUTHENTICATE_URL = "/api/auth/authenticate";
+    private static final String REGISTER_URL = "/api/auth/register";
+
     @BeforeEach
     public void setup() {
         UserRequestDto userDto = new UserRequestDto("Test", "test@email.com", "password");
@@ -56,64 +59,68 @@ class AuthControllerTest {
     }
 
     @Test
-    void testAuthenticateIncorrectPassword() throws Exception {
+    void testAuthenticate_IncorrectPassword() throws Exception {
         AuthRequest authenticationRequest = new AuthRequest("test@email.com", "incorrect_password");
 
-        mockMvc.perform(post("/api/auth/authenticate")
+        mockMvc.perform(post(AUTHENTICATE_URL)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(authenticationRequest)))
                 .andExpect(status().isUnauthorized());
     }
 
     @Test
-    void testAuthenticateUserNotFound() throws Exception {
+    void testAuthenticate_UserNotFound() throws Exception {
         AuthRequest authenticationRequest = new AuthRequest("nonexistent_user@email.com", "password");
 
-        mockMvc.perform(post("/api/auth/authenticate")
+        mockMvc.perform(post(AUTHENTICATE_URL)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(authenticationRequest)))
                 .andExpect(status().isNotFound());
     }
 
     @Test
-    void testRegisterUserAlreadyExists() throws Exception {
+    void testRegister_UserAlreadyExists() throws Exception {
         UserRequestDto existingUserDto = new UserRequestDto("Test", "test@email.com", "password");
 
-        mockMvc.perform(post("/api/auth/register")
+        mockMvc.perform(post(REGISTER_URL)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(existingUserDto)))
                 .andExpect(status().isConflict());
     }
 
     @Test
-    void testRegisterInvalidEmailFormat() throws Exception {
+    void testRegister_InvalidEmailFormat() throws Exception {
         UserRequestDto invalidEmailUserDto = new UserRequestDto("InvalidUser", "invalid_email", "password");
 
-        mockMvc.perform(post("/api/auth/register")
+        mockMvc.perform(post(REGISTER_URL)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(invalidEmailUserDto)))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
-    void testAuthenticate() throws Exception {
+    void testAuthenticate_ValidRequest() throws Exception {
         AuthRequest authenticationRequest = new AuthRequest("test@email.com", "password");
 
-        mockMvc.perform(post("/api/auth/authenticate")
+        mockMvc.perform(post(AUTHENTICATE_URL)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(authenticationRequest)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.token").exists());
+                .andExpect(jsonPath("$.token").isNotEmpty())
+                .andReturn();
+
     }
 
     @Test
-    void testRegister() throws Exception {
+    void testRegister_ValidRequest() throws Exception {
         UserRequestDto registerRequest = new UserRequestDto("User", "test_user@email.com", "password");
 
-        mockMvc.perform(post("/api/auth/register")
+        mockMvc.perform(post(REGISTER_URL)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(registerRequest)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.token").exists());
+                .andExpect(jsonPath("$.token").isNotEmpty())
+                .andReturn();
     }
+
 }

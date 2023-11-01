@@ -1,4 +1,4 @@
-package co.inventorsoft.academy.musicmanager.controller;
+package co.inventorsoft.academy.musicmanager.controller.bonustask;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;

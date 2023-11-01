@@ -1,4 +1,4 @@
-package co.inventorsoft.academy.musicmanager.controller;
+package co.inventorsoft.academy.musicmanager.controller.bonustask;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;

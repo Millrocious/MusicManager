@@ -31,7 +31,8 @@ public class SecurityConfig {
     private final AuthenticationProvider authenticationProvider;
 
     private static final String[] PUBLIC_MATCHERS = {
-            "/api/auth/**"
+            "/api/auth/**",
+            "/api/cities"
     };
 
     @Bean
